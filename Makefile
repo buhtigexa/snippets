@@ -1,7 +1,7 @@
 include .env
 export $(shell sed 's/=.*//' .env)
 
-PORT ?= $(PORT)
+PORT ?= $(PORT)	
 
 db:
 	echo "docker run --rm --name pg-test ..."
@@ -16,6 +16,9 @@ stop_db:
 	docker stop pg-test || docker rm pg-test
 	docker ps -a
 
+
+build:
+	cd cmd/api  && go build -gcflags="all=-m -l -d=checkptr -d=ssa/check_bce/debug=1 -N -race"
 
 run:
 	cd cmd/api  && go run ./... -port=$(PORT)
